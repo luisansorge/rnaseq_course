@@ -31,5 +31,6 @@ mkdir -p mapped_reads
 # -2 specifies the input file for the second read in the pair.
 # -S specifies the output SAM file for aligned reads.
 # -p 4 uses 4 threads for faster processing.
+
 apptainer exec --bind /data/ /containers/apptainer/hisat2_samtools_408dfd02f175cd88.sif hisat2 -x ${INDEX_DIR}/Mus_musculus_genome_index --rna-strandness RF -1 ${FASTQ_DIR}/${XX}_1.fastq.gz -2 ${FASTQ_DIR}/${XX}_2.fastq.gz -S ${OUTPUT_DIR}/${XX}_mappedReads.sam -p 4
  
