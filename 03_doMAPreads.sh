@@ -7,7 +7,7 @@
 #SBATCH --partition=pibu_el8
 #SBATCH --array=0-15
 
-# # Define an array containing the sample IDs (corresponding to FASTQ files).
+# Define an array containing the sample IDs (corresponding to FASTQ files).
 FASTQ_FILES=("SRR7821918" "SRR7821919" "SRR7821920" "SRR7821921" "SRR7821922" "SRR7821937" "SRR7821938" "SRR7821939" "SRR7821949" "SRR7821950" "SRR7821951" "SRR7821952" "SRR7821953" "SRR7821968" "SRR7821969" "SRR7821970")
 
 # Select the sample ID corresponding to the current task in the job array.
