@@ -24,14 +24,14 @@ SRR7821968	|Blood Control
 SRR7821969	|Blood Control
 SRR7821970|	Blood Control
 
-_Table 1: shows the sample names and corresponding experimental conditions. The sequencing was performed in paired-end mode, resulting in two FASTQ files per sample, representing read 1 and read 2, respectively._
+_Table 1: Sample names and corresponding experimental conditions. Sequencing was performed in paired-end mode, resulting in two FASTQ files per sample, representing read 1 and read 2, respectively._
 
 ## 1. Quality Control
-**Quality control assessment using the raw reads using fastqc:**
+**Quality control assessment of raw reads using FastQC:**
 
 _run script 01a_doFASTQC.sh_
 
-**Creation of fastqc reports for all samples, enabling the possibility for MultiQC analysis which creates a report of the fastqc results in order to compare the quality of reads across all samples:**
+**Creation of FastQC reports for all samples, enabling the possibility for MultiQC analysis to compare the quality of reads across all samples:**
 
 _run script 01b_doMULTIQC.sh_
 
@@ -40,29 +40,34 @@ _run script 01b_doMULTIQC.sh_
 
 _run script 02_doINDEX.sh_ 
 
-**Mapping of the raw reads to the indexed reference genome using HISAT2:**
+**Mapping raw reads to the indexed reference genome using HISAT2:**
 
 _run script 03_doMAPreads.sh_
 
-**HISAT2 output in the format of SAM files, conversion to BAM files through Samtools:**
+**Conversion of HISAT2 output SAM files to BAM files using Samtools:**
 
 _run script 04_doSAMBAMconversion.sh_
 
-**Sorting of the BAM files in order to organise alignments based on genomic position with Samtools, which is necessary for downstream analyses:**
+**Sorting BAM files to organise alignments by genomic position using Samtools, necessary for downstream analyses:**
 
 _run script 05_doBAMsort.sh_
 
-**Indexing the sorted BAM files with Samtools, creating an auxiliary .bai file for the corresponding .bam file, allowing efficient access to specific regions of the alignment data:**
+**Indexing sorted BAM files with Samtools to create auxiliary .bai files for efficient access to specific regions of alignment data:**
 
 _run script 06_doBAMindex.sh_
 
-**Following this workflow allows for the production of an indexed alignement of each sample to the reference genome of Mus musculus.**
+**Following this workflow produces an indexed alignment of each sample to the Mus musculus reference genome.**
 
 ## 3. Counting the number of reads per gene
-**Counting the numbers of reads that assigned to exons enabling the comparison of read counts across different genes and providing a foundation for subsequent differential expression analysis using featureCounts:**
+**Counting the number of reads assigned to exons to enable comparison of read counts across different genes, providing a foundation for subsequent differential expression analysis using featureCounts:**
 
 _run script 07_doCOUNTreads.sh_
 
-**Creation of a summary report of the featureCounts results in order to compare the assignment of reads across all samples with MultiQC:**
+**Creation of a summary report of featureCounts results for comparing the assignment of reads across all samples with MultiQC:**
 
 _run script 07b_doMULTIQCfeaturecounts.sh_
+
+## 4. Exploratory, Differential Expression, and Overrepresentation Analysis
+**Locally performed on RStudio, principal component analysis (PCA) and differential gene expression analysis with pairwise comparisons were conducted using the DESeq2 package. Additionally, Gene Ontology (GO) terms containing more differentially expressed genes than expected were identified using clusterProfiler:**
+
+_run script 08_DESeq2_DE_analysis in RStudio_
