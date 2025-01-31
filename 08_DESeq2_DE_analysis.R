@@ -4,6 +4,7 @@ library(dplyr)
 library(ggplot2)
 library(clusterProfiler)
 library(org.Mm.eg.db)
+library(writexl)
 
 # With the help of the DESeq2 Tutorial from Ashley Valentina Schwartz and DESEQ2 R Tutorial by Lauren Ashlock.
 # https://ashleyschwartz.com/posts/2023/05/deseq2-tutorial
@@ -140,17 +141,17 @@ head(res_lung_pval)
 
 # Relevant genes with the lowest adjusted p-value (padj).
 par(mfrow=c(2,2))
-plotCounts(dds, gene="ENSMUSG00000105504", intgroup="group", main = "Gbp5")
-plotCounts(dds, gene="ENSMUSG00000028270", intgroup="group", main = "Gbp2")
-plotCounts(dds, gene="ENSMUSG00000015947", intgroup="group", main = "Fcgr1")
-plotCounts(dds, gene="ENSMUSG00000078922", intgroup="group", main = "Tgtp1")
+plotCounts(dds, gene="ENSMUSG00000028270", intgroup="group", main = expression(italic("Gbp2")))
+plotCounts(dds, gene="ENSMUSG00000105504", intgroup="group", main = expression(italic("Gbp5")))
+plotCounts(dds, gene="ENSMUSG00000052776", intgroup="group", main = expression(italic("Oas1a")))
+plotCounts(dds, gene="ENSMUSG00000078922", intgroup="group", main = expression(italic("Tgtp1")))
 
 # Relevant genes based on the paper by Singhania et al. (2019).
 par(mfrow=c(2,3))
 #plotCounts(dds, gene="ENSMUSG00000048806", intgroup="group", main = "Ifnb1")
 #plotCounts(dds, gene="ENSMUSG00000034459", intgroup="group", main = "Ifit1")
 plotCounts(dds, gene="ENSMUSG00000074896", intgroup="group", main = "Ifit3")
-plotCounts(dds, gene="ENSMUSG00000052776", intgroup="group", main = "Oas1a")
+plotCounts(dds, gene="ENSMUSG00000015947", intgroup="group", main = "Fcgr1")
 #plotCounts(dds, gene="ENSMUSG00000032690", intgroup="group", main = "Oas2")
 #plotCounts(dds, gene="ENSMUSG00000032661", intgroup="group", main = "Oas3")
 plotCounts(dds, gene="ENSMUSG00000041827", intgroup="group", main = "Oasl1")
@@ -219,11 +220,26 @@ ego_blood <- enrichGO(
   readable = TRUE                # converts ENSEMBL ids to gene symbols
 )
 
-# Creates barplot and dotplot of the Top 20 GO terms in lung tissue.
-barplot(ego_lung, showCategory = 20)  
-dotplot(ego_lung, showCategory = 20)
+# Creates barplot and dotplot of the Top 10 GO terms in lung tissue.
+barplot(ego_lung, showCategory = 10)  
+dotplot(ego_lung, showCategory = 10)
 
-# Creates barplot and dotplot of the Top 20 GO terms in blood.
-barplot(ego_blood, showCategory = 20)
-dotplot(ego_blood, showCategory = 20)
+# Creates barplot and dotplot of the Top 10 GO terms in blood.
+barplot(ego_blood, showCategory = 10)
+dotplot(ego_blood, showCategory = 10)
 
+go_results_ego_lung <- ego_lung@result  #Lung tissue results
+go_results_ego_blood <- ego_blood@result  #Blood tissue results
+
+#Creating the results in a dataframe
+go_results_ego_lung_df <- as.data.frame(go_results_ego_lung)
+go_results_ego_blood_df <- as.data.frame(go_results_ego_blood)
+
+#Creating list of results
+results_list <- list(
+  "GO_Lung_tissue" = go_results_ego_lung_df,
+  "GO_Blood_tissue" = go_results_ego_blood_df
+)
+
+#Write all results to an Excel file
+write_xlsx(results_list, path = "GO_Enrichment_Results_Lung_Blood.xlsx")
